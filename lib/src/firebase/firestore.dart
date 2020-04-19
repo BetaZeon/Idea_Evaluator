@@ -21,11 +21,11 @@ class AccountInfo{
       return null;
     }
   }
-  Future userType() async{
+  Future userInfo() async{
     DocumentSnapshot data;
     await _users.document(_user.email).get().then((DocumentSnapshot ds){
       data = ds;
     });
-    return data.data['type'];
+    return data.data;
   }
 }

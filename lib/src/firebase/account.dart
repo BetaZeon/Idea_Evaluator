@@ -4,6 +4,12 @@ class Accounts{
   // Initialising firebase class
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
+  Stream<FirebaseUser> get account{
+    return _auth.onAuthStateChanged;
+  }
+
+
   Future<FirebaseUser> registerUser(String email, String password) async{
     try{
       AuthResult user = await _auth.createUserWithEmailAndPassword(email: email, password: password);

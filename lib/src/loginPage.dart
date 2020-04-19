@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ideaevaluator/src/firebase/account.dart';
 import 'package:ideaevaluator/src/firebase/firestore.dart';
-import 'package:ideaevaluator/src/profilepage.dart';
 import 'package:ideaevaluator/src/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -106,8 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                 FirebaseUser user = await _user.loginUser(_email, _password);
                 if(user != null)
                 {
-                  dynamic type = await AccountInfo(user).userType();
-                  Navigator.of(context).pushReplacementNamed('/home', arguments: type);
+                  dynamic type = await AccountInfo(user).userInfo();
+                  Navigator.of(context).pushReplacementNamed('/home', arguments: type['type']);
                 }
                 else
                 {
