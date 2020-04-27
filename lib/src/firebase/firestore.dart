@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AccountInfo{
   final FirebaseUser _user;
@@ -27,5 +30,22 @@ class AccountInfo{
       data = ds;
     });
     return data.data;
+  }
+
+  Future changeProfileImage(File img) async{
+    try{
+      StorageReference storageReference = FirebaseStorage.instance.ref().child('profileImages/${_user.email}');
+      StorageUploadTask uploadTask = storageReference.putFile(img);
+      await uploadTask.onComplete;
+      print('File Uploaded');
+      String url;
+      await storageReference.getDownloadURL().then((fileURL) {
+        url = fileURL.toString();
+      });
+      return url;
+    }
+    catch(e){
+      return null;
+    }
   }
 }

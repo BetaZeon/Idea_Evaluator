@@ -16,6 +16,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String imgUrl = 'https://scontent-del1-1.xx.fbcdn.net/v/t1.0-9/s960x960/47076705_300676554111412_2898229581855064064_o.jpg?_nc_cat=105&_nc_ohc=27HKn-5Yso8AX8G2I3p&_nc_ht=scontent-del1-1.xx&_nc_tp=7&oh=a7a95b441fc38e1039649758b583a9d9&oe=5EFC361E';
+  final String drawerImgUrl = 'https://ak9.picdn.net/shutterstock/videos/1024107419/thumb/1.jpg';
   Map userData = {};
 
   Future setup(FirebaseUser user) async{
@@ -26,8 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-    final String imgUrl = 'https://scontent-del1-1.xx.fbcdn.net/v/t1.0-9/s960x960/47076705_300676554111412_2898229581855064064_o.jpg?_nc_cat=105&_nc_ohc=27HKn-5Yso8AX8G2I3p&_nc_ht=scontent-del1-1.xx&_nc_tp=7&oh=a7a95b441fc38e1039649758b583a9d9&oe=5EFC361E';
-    final String drawerImgUrl = 'https://ak9.picdn.net/shutterstock/videos/1024107419/thumb/1.jpg';
     return FutureBuilder(
       future: setup(Provider.of<FirebaseUser>(context)),
       builder: (context, snapshot){
@@ -61,8 +61,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: <Widget>[
                         new SizedBox(height: _height/12,),
                         new CircleAvatar(radius:_width<_height? _width/4:_height/4,backgroundImage: NetworkImage(imgUrl),),
+                        SizedBox(height: 10,),
                         new SizedBox(height: _height/25.0,),
-                        new Text('${userData['userName']}', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: _width/15, color: Colors.white),),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            new Text('${userData['userName']}', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: _width/15, color: Colors.white),),
+                            IconButton(
+                              icon: Icon(Icons.camera_enhance, size: 25,),
+                              color: Colors.white70,
+                              onPressed: () async{
+                                dynamic image;
+                                await ImagePicker.pickImage(source: ImageSource.gallery).then((img){
+                                  image = img;
+                                });
+                                if(image != null){
+                                    dynamic result = await AccountInfo(Provider.of<FirebaseUser>(context, listen: false)).changeProfileImage(image);
+                                    if(result != null){
+                                      print(imgUrl);
+                                      setState(() {
+                                        imgUrl = result;
+                                      });
+                                    }
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                         new Padding(padding: new EdgeInsets.only(top: _height/30, left: _width/8, right: _width/8),
                           child:new Text('Developer, Enthusiast and a curious human.\nphotographer,pefectionist ',
                             style: new TextStyle(fontWeight: FontWeight.normal, fontSize: _width/25,color: Colors.white),textAlign: TextAlign.center,) ,),
