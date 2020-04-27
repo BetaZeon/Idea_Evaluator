@@ -16,15 +16,16 @@ class _HomeState extends State<Home> {
   Map userData = {};
   Accounts _account = Accounts();
   dynamic body =  MyHomePage();
+  String imgUrl;
+  final String drawerImgUrl = 'https://ak9.picdn.net/shutterstock/videos/1024107419/thumb/1.jpg';
 
   Future setup(FirebaseUser user) async{
     userData = await AccountInfo(user).userInfo();
+    imgUrl = await AccountInfo(user).getProfileImage();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String imgUrl = 'https://scontent-del1-1.xx.fbcdn.net/v/t1.0-9/s960x960/47076705_300676554111412_2898229581855064064_o.jpg?_nc_cat=105&_nc_ohc=27HKn-5Yso8AX8G2I3p&_nc_ht=scontent-del1-1.xx&_nc_tp=7&oh=a7a95b441fc38e1039649758b583a9d9&oe=5EFC361E';
-    final String drawerImgUrl = 'https://ak9.picdn.net/shutterstock/videos/1024107419/thumb/1.jpg';
     return FutureBuilder(
         future: setup(Provider.of<FirebaseUser>(context)),
         builder: (context, snapshot){
@@ -42,7 +43,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     currentAccountPicture: CircleAvatar(
-                      backgroundImage: NetworkImage(imgUrl),
+                      backgroundImage: NetworkImage(imgUrl != null ? imgUrl : 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'),
                     ),
                     accountEmail: Text('${Provider.of<FirebaseUser>(context) != null ? Provider.of<FirebaseUser>(context).email : "Not Logged In"}',style: TextStyle(color: Colors.black),),
                     accountName: Text('${userData['userName']}',style: TextStyle(color: Colors.black),),

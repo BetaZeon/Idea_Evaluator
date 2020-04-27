@@ -16,12 +16,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String imgUrl = 'https://scontent-del1-1.xx.fbcdn.net/v/t1.0-9/s960x960/47076705_300676554111412_2898229581855064064_o.jpg?_nc_cat=105&_nc_ohc=27HKn-5Yso8AX8G2I3p&_nc_ht=scontent-del1-1.xx&_nc_tp=7&oh=a7a95b441fc38e1039649758b583a9d9&oe=5EFC361E';
-  final String drawerImgUrl = 'https://ak9.picdn.net/shutterstock/videos/1024107419/thumb/1.jpg';
+  dynamic imgUrl;
   Map userData = {};
-
   Future setup(FirebaseUser user) async{
     userData = await AccountInfo(user).userInfo();
+    imgUrl = await AccountInfo(user).getProfileImage();
   }
 
   @override
@@ -31,15 +30,19 @@ class _MyHomePageState extends State<MyHomePage> {
     return FutureBuilder(
       future: setup(Provider.of<FirebaseUser>(context)),
       builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.none && snapshot.data == null){
+            return Container(
+              child: Center(child: Text("Loading"),),
+            );
+        }
         return Stack(children: <Widget>[
-          new Container(color: Colors.blue,),
-          new Image.network(imgUrl, fit: BoxFit.fill,),
-          new BackdropFilter(
-              filter: new ui.ImageFilter.blur(
+          Container(color: Colors.blue,),
+          BackdropFilter(
+              filter: ui.ImageFilter.blur(
                 sigmaX: 6.0,
                 sigmaY: 6.0,
               ),
-              child: new Container(
+              child: Container(
                 decoration: BoxDecoration(
                   color:  Colors.blue.withOpacity(0.9),
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -47,26 +50,26 @@ class _MyHomePageState extends State<MyHomePage> {
               )
           ),
           Align(
-            child: new Column(
+            child: Column(
                 children: <Widget>[
                   AppBar(
-                    title: new Text(widget.title),
+                    title: Text(widget.title),
                     centerTitle: false,
                     elevation: 0.0,
                     backgroundColor: Colors.transparent,
                   ),
 
                   Center(
-                    child: new Column(
+                    child: Column(
                       children: <Widget>[
-                        new SizedBox(height: _height/12,),
-                        new CircleAvatar(radius:_width<_height? _width/4:_height/4,backgroundImage: NetworkImage(imgUrl),),
+                        SizedBox(height: _height/12,),
+                        CircleAvatar(radius:_width<_height? _width/4:_height/4, backgroundImage: NetworkImage(imgUrl == null ? 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png' : imgUrl),),
                         SizedBox(height: 10,),
-                        new SizedBox(height: _height/25.0,),
+                        SizedBox(height: _height/25.0,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            new Text('${userData['userName']}', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: _width/15, color: Colors.white),),
+                            Text('${userData['userName']}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: _width/15, color: Colors.white),),
                             IconButton(
                               icon: Icon(Icons.camera_enhance, size: 25,),
                               color: Colors.white70,
@@ -88,22 +91,22 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ],
                         ),
-                        new Padding(padding: new EdgeInsets.only(top: _height/30, left: _width/8, right: _width/8),
-                          child:new Text('Developer, Enthusiast and a curious human.\nphotographer,pefectionist ',
-                            style: new TextStyle(fontWeight: FontWeight.normal, fontSize: _width/25,color: Colors.white),textAlign: TextAlign.center,) ,),
-                        new Divider(height: _height/30,color: Colors.white,),
-                        new Row(
+                        Padding(padding: EdgeInsets.only(top: _height/30, left: _width/8, right: _width/8),
+                          child: Text('Developer, Enthusiast and a curious human.\nphotographer,pefectionist ',
+                            style: TextStyle(fontWeight: FontWeight.normal, fontSize: _width/25,color: Colors.white),textAlign: TextAlign.center,) ,),
+                        Divider(height: _height/30,color: Colors.white,),
+                        Row(
                           children: <Widget>[
                             rowCell(15,'POSTS'),
                             rowCell(673, 'FOLLOWERS'),
                             rowCell(275, 'FOLLOWING'),
                           ],),
-                        new Divider(height: _height/30,color: Colors.white),
-                        new Padding(padding: new EdgeInsets.only(left: _width/8, right: _width/8), child: new FlatButton(onPressed: (){},
-                          child: new Container(child: new Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-                            new Icon(Icons.person),
-                            new SizedBox(width: _width/30,),
-                            new Text('FOLLOW')
+                        Divider(height: _height/30,color: Colors.white),
+                        Padding(padding: EdgeInsets.only(left: _width/8, right: _width/8), child: FlatButton(onPressed: (){},
+                          child: Container(child: Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+                            Icon(Icons.person),
+                            SizedBox(width: _width/30,),
+                            Text('FOLLOW')
                           ],)),color: Colors.blue[50],),),
                       ],
                     ),
@@ -117,9 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget rowCell(int count, String type) => new Expanded(child: new Column(children: <Widget>[
-    new Text('$count',style: new TextStyle(color: Colors.white),),
-    new Text(type,style: new TextStyle(color: Colors.white, fontWeight: FontWeight.normal))
+  Widget rowCell(int count, String type) => Expanded(child: Column(children: <Widget>[
+    Text('$count',style: TextStyle(color: Colors.white),),
+    Text(type,style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal))
   ],));
 }
 

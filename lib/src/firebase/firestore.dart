@@ -37,7 +37,20 @@ class AccountInfo{
       StorageReference storageReference = FirebaseStorage.instance.ref().child('profileImages/${_user.email}');
       StorageUploadTask uploadTask = storageReference.putFile(img);
       await uploadTask.onComplete;
-      print('File Uploaded');
+      String url;
+      await storageReference.getDownloadURL().then((fileURL) {
+        url = fileURL.toString();
+      });
+      return url;
+    }
+    catch(e){
+      return null;
+    }
+  }
+
+  Future getProfileImage() async{
+    try{
+      StorageReference storageReference = FirebaseStorage.instance.ref().child('profileImages/${_user.email}');
       String url;
       await storageReference.getDownloadURL().then((fileURL) {
         url = fileURL.toString();
