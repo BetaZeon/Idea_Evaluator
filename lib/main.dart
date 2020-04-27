@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ideaevaluator/src/firebase/account.dart';
 import 'package:ideaevaluator/src/pages/eventlist.dart';
+import 'package:ideaevaluator/src/pages/success.dart';
 import 'package:provider/provider.dart';
 import 'home.dart';
 import 'src/welcomePage.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
           '/home' : (context) => Home(),
           '/events' : (context) => Events(),
           '/welcome' : (context) => WelcomePage(),
+          '/success' : (context) => Success(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(

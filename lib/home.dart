@@ -50,8 +50,8 @@ class _HomeState extends State<Home> {
                   ),
                   Padding(padding: EdgeInsets.only(top: 20)),
                   ListTile(
-                    title: Text('Home'),
-                    leading: Icon(Icons.home),
+                    title: Text('Upcomming Events'),
+                    leading: Icon(Icons.dns),
                     onTap: () {
                       // Update the state of the app.
                       // ...

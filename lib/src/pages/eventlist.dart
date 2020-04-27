@@ -49,7 +49,9 @@ class _EventsState extends State<Events> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListTile(
                       onTap: () {
-                        Text('You have registered for this evetn successfully', style: TextStyle(color: Colors.amberAccent),);
+                        setState(() {
+                          Navigator.of(context).pushNamed('/success');
+                        });
                       },
                       title: Row(
                         children: <Widget>[
