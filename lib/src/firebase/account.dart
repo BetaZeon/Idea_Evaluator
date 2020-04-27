@@ -33,7 +33,8 @@ class Accounts{
   }
   Future signOut() async{
     try{
-      return await _auth.signOut();
+      await _auth.signOut();
+      return 'Success';
     }
     catch(e){
       return null;
